@@ -124,6 +124,7 @@ match_path(_Path, _Pattern, _Bindings) ->
     false.
 
 parse_params(Req) ->
+    ReqHeadersParams = [{<<"req_headers">>, maps:to_list(cowboy_req:headers(Req))}],
     QueryParams = cowboy_req:parse_qs(Req),
     BodyParams = case cowboy_req:has_body(Req) of
                      true  -> {_, Body, _} = cowboy_req:read_body(Req),
@@ -134,7 +135,7 @@ parse_params(Req) ->
                               end;
                      false -> []
                  end,
-    QueryParams ++ BodyParams.
+    QueryParams ++ BodyParams ++ ReqHeadersParams.
 
 parse_var("atom", S) -> list_to_existing_atom(S);
 parse_var("int", S)  -> list_to_integer(S);
