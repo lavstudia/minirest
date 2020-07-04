@@ -124,7 +124,7 @@ match_path(_Path, _Pattern, _Bindings) ->
     false.
 
 parse_params(Req) ->
-    ReqHeadersParams = [{<<"req_headers">>, maps:to_list(cowboy_req:headers(Req))}],
+    ReqHeadersParams = [{<<"req_headers">>, cowboy_req:headers(Req)}],
     QueryParams = cowboy_req:parse_qs(Req),
     BodyParams = case cowboy_req:has_body(Req) of
                      true  -> {_, Body, _} = cowboy_req:read_body(Req),
